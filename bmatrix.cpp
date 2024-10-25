@@ -2,13 +2,23 @@
 #include <system_error>
 #include <vector>
 namespace bmatrix{
-		class bmatrix{
-				public:
-				std::vector<std::vector<int>> matrix;
-				int length = 0;
-				int height = 0;
-				int padding = 0;
 
+		class bmatrix{
+				private:
+					std::vector<std::vector<int>> matrix;
+					int length = 0;
+					int height = 0;
+					int padding = 0;
+
+					void validate_and_throw_if_invalid_pos(int i, int j) {
+							if (i > height || j > height || i < 0 || j < 0) {
+								throw std::invalid_argument(
+									"Tried to access invalid position, matrix size: " + std::to_string(this->height)
+											+ " requested position: " + std::to_string(i) + ", " + std::to_string(j));
+							}
+						}
+
+				public:
 				bmatrix(int size){
 						this->length = size / 8;
 						if (length % 8){
@@ -23,14 +33,6 @@ namespace bmatrix{
 								matrix[i].resize(height);
 						
 				}
-				void validate_and_throw_if_invalid_pos(int i, int j) {
-					if (i > height || j > height || i < 0 || j < 0) {
-						throw std::invalid_argument(
-							"Tried to access invalid position, matrix size: " + std::to_string(this->height)
-									+ " requested position: " + std::to_string(i) + ", " + std::to_string(j));
-					}
-				}
-
 				void set(int i, int j){
 						validate_and_throw_if_invalid_pos(i, j);
 
